@@ -45,15 +45,15 @@ export const LockScreenGuides: React.FC<LockScreenGuidesProps> = ({
           </div>
         </div>
 
-        {/* Lock Screen Date & Clock (0% - 28% Safe Area) */}
-        <div className="mt-8 flex flex-col items-center">
+        {/* Lock Screen Date & Clock (0% - 24% Safe Area) */}
+        <div className="mt-2.5 sm:mt-4 flex flex-col items-center">
           <div
-            className={`text-sm font-semibold tracking-wide drop-shadow-sm opacity-90 ${textColor}`}
+            className={`text-xs sm:text-sm font-semibold tracking-wide drop-shadow-sm opacity-90 ${textColor}`}
           >
             {dateString}
           </div>
           <div
-            className={`font-sans-ui text-7xl font-bold tracking-tight drop-shadow-md md:text-8xl ${textColor}`}
+            className={`font-sans-ui text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight drop-shadow-md ${textColor}`}
           >
             {clockTime}
           </div>
@@ -61,23 +61,23 @@ export const LockScreenGuides: React.FC<LockScreenGuidesProps> = ({
       </div>
 
       {/* Bottom Section: Flashlight, Camera & Home Indicator (86% - 100%) */}
-      <div className="flex flex-col items-center gap-4 pb-2">
+      <div className="flex flex-col items-center gap-3 pb-1">
         {/* Quick Action Shortcuts */}
-        <div className="flex w-full justify-between px-5">
+        <div className="flex w-full justify-between px-4 sm:px-6">
           <div
-            className={`flex h-12 w-12 items-center justify-center rounded-full backdrop-blur-md shadow-lg ${iconBg}`}
+            className={`flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full backdrop-blur-md shadow-lg ${iconBg}`}
           >
-            <Flashlight className="h-5 w-5" />
+            <Flashlight className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
           <div
-            className={`flex h-12 w-12 items-center justify-center rounded-full backdrop-blur-md shadow-lg ${iconBg}`}
+            className={`flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full backdrop-blur-md shadow-lg ${iconBg}`}
           >
-            <Camera className="h-5 w-5" />
+            <Camera className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
         </div>
 
         {/* Home Indicator Bar */}
-        <div className={`h-1.5 w-36 rounded-full opacity-70 ${barColor}`} />
+        <div className={`h-1.5 w-32 sm:w-36 rounded-full opacity-70 ${barColor}`} />
       </div>
     </div>
   );

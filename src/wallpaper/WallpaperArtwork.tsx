@@ -29,26 +29,45 @@ export const WallpaperArtwork = forwardRef<SVGSVGElement, WallpaperArtworkProps>
     // Cap at 5 milestones for maximum visual balance on phone screen as requested by the brief
     const visibleMilestones = sortedMilestones.slice(0, 5);
 
-    // Scale factor relative to 1290 x 2796 reference
-    const scale = height / 2796;
-    const offsetY = contentOffsetY * scale;
+    // Responsive scaling based on both dimensions so short/wide or tall screens stay proportional
+    const scale = Math.min(width / 1290, height / 2796);
+    const effectiveScale = Math.max(0.65, scale);
+    const offsetY = contentOffsetY * effectiveScale;
 
-    // Geometry coordinates (scaled)
-    // Region 1: 30% to 46% (y ~ 820 to 1280 on 2796h)
-    const countdownCenterY = (920 + contentOffsetY) * scale;
-    const countdownLabelY = (1050 + contentOffsetY) * scale;
-    const movingDateY = (1120 + contentOffsetY) * scale;
+    // Full-height vertical percentage distribution
+    // 1. Countdown Region: 24% to 37%
+    const countdownCenterY = height * 0.27 + offsetY;
+    const countdownLabelY = height * 0.325 + offsetY;
+    const movingDateY = height * 0.36 + offsetY;
 
-    // Region 2: 47% to 68% (Home illustration)
-    const houseWidth = Math.min(width * 0.76, 920 * scale);
+    // 2. Home Illustration: 38% to 60%
+    const houseWidth = Math.min(width * 0.82, height * 0.38 * (600 / 440));
     const houseHeight = houseWidth * (440 / 600);
     const houseX = (width - houseWidth) / 2;
-    const houseY = (1200 + contentOffsetY) * scale;
+    const houseY = height * 0.385 + offsetY;
 
-    // Region 3: 69% to 86% (Next Milestone & Compact Timeline)
-    const timelineStartY = (1890 + contentOffsetY) * scale;
-    const timelineBoxWidth = Math.min(width * 0.82, 980 * scale);
+    // 3. Next Milestone & Timeline: 61% to 85%
+    const timelineBoxWidth = Math.min(width * 0.86, 1020 * effectiveScale);
     const timelineBoxX = (width - timelineBoxWidth) / 2;
+    const timelineStartY = height * 0.61 + offsetY;
+    const timelineRowGap = 56 * effectiveScale;
+
+    // 4. Ground Foundation Landscape: 86% to 100%
+    const groundLevelY = height * 0.89;
+
+    // Celestial night sky stars (subtle, deterministic coordinates in upper 25%)
+    const celestialStars = [
+      { cx: width * 0.12, cy: height * 0.06, opacity: 0.6, r: 1.8 * effectiveScale },
+      { cx: width * 0.24, cy: height * 0.11, opacity: 0.8, r: 2.2 * effectiveScale },
+      { cx: width * 0.38, cy: height * 0.05, opacity: 0.5, r: 1.5 * effectiveScale },
+      { cx: width * 0.65, cy: height * 0.08, opacity: 0.75, r: 2.0 * effectiveScale },
+      { cx: width * 0.82, cy: height * 0.05, opacity: 0.85, r: 2.4 * effectiveScale },
+      { cx: width * 0.90, cy: height * 0.12, opacity: 0.5, r: 1.6 * effectiveScale },
+      { cx: width * 0.16, cy: height * 0.19, opacity: 0.7, r: 2.0 * effectiveScale },
+      { cx: width * 0.85, cy: height * 0.18, opacity: 0.65, r: 1.8 * effectiveScale },
+      { cx: width * 0.08, cy: height * 0.28, opacity: 0.55, r: 1.5 * effectiveScale },
+      { cx: width * 0.92, cy: height * 0.27, opacity: 0.7, r: 2.1 * effectiveScale },
+    ];
 
     return (
       <svg
@@ -64,27 +83,53 @@ export const WallpaperArtwork = forwardRef<SVGSVGElement, WallpaperArtworkProps>
             <style dangerouslySetInnerHTML={{ __html: FONT_FACE_CSS }} />
           )}
 
-          {/* Ambient background subtle dusk glow */}
-          <radialGradient cx="50%" cy="45%" id="ambientDuskGlow" r="55%">
+          {/* Full-Height Atmospheric Sky-to-Ground Gradient */}
+          <linearGradient id="fullHeightAtmosphere" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stopColor={theme.skyTop} />
+            <stop offset="30%" stopColor={theme.background} />
+            <stop offset="52%" stopColor={theme.skyMid} />
+            <stop offset="78%" stopColor={theme.background} />
+            <stop offset="100%" stopColor={theme.groundFill} />
+          </linearGradient>
+
+          {/* Ambient Dusk Warm Glow behind the home */}
+          <radialGradient cx="50%" cy="48%" id="ambientDuskGlow" r="50%">
             <stop
               offset="0%"
               stopColor={theme.highlight}
-              stopOpacity={themeKey === "paper" ? "0.08" : "0.06"}
+              stopOpacity={themeKey === "paper" ? "0.12" : "0.09"}
             />
-            <stop offset="60%" stopColor={theme.highlight} stopOpacity="0" />
+            <stop
+              offset="50%"
+              stopColor={theme.highlight}
+              stopOpacity={themeKey === "paper" ? "0.04" : "0.03"}
+            />
+            <stop offset="100%" stopColor={theme.highlight} stopOpacity="0" />
           </radialGradient>
 
-          {/* Next badge pill gradient */}
+          {/* Next Badge Pill Gradient */}
           <linearGradient id="badgeGradient" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stopColor={theme.highlight} stopOpacity="0.18" />
+            <stop offset="0%" stopColor={theme.highlight} stopOpacity="0.2" />
             <stop offset="100%" stopColor={theme.highlight} stopOpacity="0.06" />
+          </linearGradient>
+
+          {/* Ground Silhouette Gradient */}
+          <linearGradient id="groundLandscapeFade" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stopColor={theme.groundFill} stopOpacity="0.3" />
+            <stop offset="100%" stopColor={theme.groundFill} stopOpacity="0.85" />
           </linearGradient>
         </defs>
 
-        {/* Background Fill */}
-        <rect fill={theme.background} height={height} width={width} x="0" y="0" />
+        {/* 1. Full-Height Atmospheric Background (covers 100% of height) */}
+        <rect
+          fill="url(#fullHeightAtmosphere)"
+          height={height}
+          width={width}
+          x="0"
+          y="0"
+        />
 
-        {/* Subtle Radial Dusk Glow behind the home */}
+        {/* 2. Soft Ambient Dusk Glow behind home */}
         <rect
           fill="url(#ambientDuskGlow)"
           height={height}
@@ -93,15 +138,35 @@ export const WallpaperArtwork = forwardRef<SVGSVGElement, WallpaperArtworkProps>
           y="0"
         />
 
+        {/* 3. Delicate Celestial Stars in Upper Sky (Upper 30%) */}
+        {themeKey !== "paper" && (
+          <g>
+            {celestialStars.map((star, i) => (
+              <circle
+                cx={star.cx}
+                cy={star.cy}
+                fill={theme.starsColor}
+                key={i}
+                opacity={star.opacity}
+                r={star.r}
+              />
+            ))}
+          </g>
+        )}
+
         {/* =======================================================
-            REGION 1: COUNTDOWN (30% - 47%)
+            REGION 1: COUNTDOWN (24% - 37%)
             ======================================================= */}
         <g textAnchor="middle">
           {/* Large Countdown Number / Headline */}
           <text
             fill={theme.primaryText}
             fontFamily="'DM Serif Display', Georgia, serif"
-            fontSize={countdown.isToday || countdown.isWelcomeHome ? 130 * scale : 190 * scale}
+            fontSize={
+              countdown.isToday || countdown.isWelcomeHome
+                ? 130 * effectiveScale
+                : 185 * effectiveScale
+            }
             fontWeight="400"
             letterSpacing="-0.02em"
             x={width / 2}
@@ -114,7 +179,7 @@ export const WallpaperArtwork = forwardRef<SVGSVGElement, WallpaperArtworkProps>
           <text
             fill={theme.secondaryText}
             fontFamily="'Manrope', -apple-system, sans-serif"
-            fontSize={32 * scale}
+            fontSize={31 * effectiveScale}
             fontWeight="600"
             letterSpacing="0.16em"
             x={width / 2}
@@ -127,7 +192,7 @@ export const WallpaperArtwork = forwardRef<SVGSVGElement, WallpaperArtworkProps>
           <text
             fill={theme.secondaryText}
             fontFamily="'Manrope', -apple-system, sans-serif"
-            fontSize={28 * scale}
+            fontSize={27 * effectiveScale}
             fontWeight="500"
             letterSpacing="0.04em"
             opacity="0.85"
@@ -139,7 +204,7 @@ export const WallpaperArtwork = forwardRef<SVGSVGElement, WallpaperArtworkProps>
         </g>
 
         {/* =======================================================
-            REGION 2: ARCHITECTURAL HOME ILLUSTRATION (47% - 68%)
+            REGION 2: ARCHITECTURAL HOME ILLUSTRATION (38% - 60%)
             ======================================================= */}
         <g transform={`translate(${houseX}, ${houseY})`}>
           <svg height={houseHeight} viewBox="0 0 600 440" width={houseWidth}>
@@ -151,7 +216,7 @@ export const WallpaperArtwork = forwardRef<SVGSVGElement, WallpaperArtworkProps>
         </g>
 
         {/* =======================================================
-            REGION 3: NEXT ACTION & COMPACT TIMELINE (69% - 86%)
+            REGION 3: NEXT ACTION & COMPACT TIMELINE (61% - 85%)
             ======================================================= */}
         <g transform={`translate(${timelineBoxX}, ${timelineStartY})`}>
           {/* Next Milestone Card */}
@@ -161,37 +226,37 @@ export const WallpaperArtwork = forwardRef<SVGSVGElement, WallpaperArtworkProps>
               <rect
                 fill={theme.highlight}
                 fillOpacity={themeKey === "paper" ? "0.14" : "0.12"}
-                height={100 * scale}
-                rx={20 * scale}
+                height={104 * effectiveScale}
+                rx={20 * effectiveScale}
                 stroke={theme.highlight}
                 strokeOpacity="0.4"
-                strokeWidth={1.5 * scale}
+                strokeWidth={1.5 * effectiveScale}
                 width={timelineBoxWidth}
                 x="0"
                 y="0"
               />
-              {/* Soft Checkmark / Star Icon */}
+              {/* Soft Checkmark Icon */}
               <circle
-                cx={48 * scale}
-                cy={50 * scale}
+                cx={48 * effectiveScale}
+                cy={52 * effectiveScale}
                 fill={theme.completedAccent}
-                r={18 * scale}
+                r={18 * effectiveScale}
               />
               <path
-                d={`M ${40 * scale} ${50 * scale} L ${46 * scale} ${56 * scale} L ${57 * scale} ${44 * scale}`}
+                d={`M ${40 * effectiveScale} ${52 * effectiveScale} L ${46 * effectiveScale} ${58 * effectiveScale} L ${57 * effectiveScale} ${46 * effectiveScale}`}
                 fill="none"
                 stroke={theme.background}
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={3 * scale}
+                strokeWidth={3 * effectiveScale}
               />
               <text
                 fill={theme.primaryText}
                 fontFamily="'Manrope', -apple-system, sans-serif"
-                fontSize={32 * scale}
+                fontSize={32 * effectiveScale}
                 fontWeight="700"
-                x={80 * scale}
-                y={58 * scale}
+                x={82 * effectiveScale}
+                y={61 * effectiveScale}
               >
                 You’re ready for moving day.
               </text>
@@ -202,11 +267,11 @@ export const WallpaperArtwork = forwardRef<SVGSVGElement, WallpaperArtworkProps>
               {/* Pill Container */}
               <rect
                 fill="url(#badgeGradient)"
-                height={116 * scale}
-                rx={20 * scale}
+                height={118 * effectiveScale}
+                rx={20 * effectiveScale}
                 stroke={theme.highlight}
                 strokeOpacity="0.35"
-                strokeWidth={1.5 * scale}
+                strokeWidth={1.5 * effectiveScale}
                 width={timelineBoxWidth}
                 x="0"
                 y="0"
@@ -215,26 +280,26 @@ export const WallpaperArtwork = forwardRef<SVGSVGElement, WallpaperArtworkProps>
               {/* Next Badge Pill */}
               <rect
                 fill={theme.highlight}
-                height={36 * scale}
-                rx={8 * scale}
+                height={36 * effectiveScale}
+                rx={8 * effectiveScale}
                 width={
                   milestoneStatus.statusLabel === "TODAY"
-                    ? 110 * scale
+                    ? 110 * effectiveScale
                     : milestoneStatus.statusLabel === "STILL TO DO"
-                    ? 180 * scale
-                    : 220 * scale
+                    ? 180 * effectiveScale
+                    : 220 * effectiveScale
                 }
-                x={32 * scale}
-                y={20 * scale}
+                x={32 * effectiveScale}
+                y={20 * effectiveScale}
               />
               <text
                 fill={theme.background}
                 fontFamily="'Manrope', -apple-system, sans-serif"
-                fontSize={19 * scale}
+                fontSize={19 * effectiveScale}
                 fontWeight="800"
                 letterSpacing="0.08em"
-                x={44 * scale}
-                y={44 * scale}
+                x={44 * effectiveScale}
+                y={44 * effectiveScale}
               >
                 {milestoneStatus.statusLabel}
               </text>
@@ -243,11 +308,11 @@ export const WallpaperArtwork = forwardRef<SVGSVGElement, WallpaperArtworkProps>
               <text
                 fill={theme.primaryText}
                 fontFamily="'Manrope', -apple-system, sans-serif"
-                fontSize={34 * scale}
+                fontSize={33 * effectiveScale}
                 fontWeight="700"
                 letterSpacing="-0.01em"
-                x={32 * scale}
-                y={94 * scale}
+                x={32 * effectiveScale}
+                y={95 * effectiveScale}
               >
                 {milestoneStatus.nextMilestone.label}
               </text>
@@ -255,12 +320,12 @@ export const WallpaperArtwork = forwardRef<SVGSVGElement, WallpaperArtworkProps>
           ) : null}
 
           {/* Compact Preparation Timeline Rows */}
-          <g transform={`translate(0, ${150 * scale})`}>
+          <g transform={`translate(0, ${150 * effectiveScale})`}>
             {visibleMilestones.map((milestone: Milestone, index: number) => {
               const isNext = milestone.id === milestoneStatus.activeMilestoneId;
               const isCompleted = milestone.completed;
-              const rowY = index * 48 * scale;
-              const bulletX = 24 * scale;
+              const rowY = index * timelineRowGap;
+              const bulletX = 24 * effectiveScale;
 
               return (
                 <g key={milestone.id} transform={`translate(0, ${rowY})`}>
@@ -269,34 +334,34 @@ export const WallpaperArtwork = forwardRef<SVGSVGElement, WallpaperArtworkProps>
                     <g>
                       <circle
                         cx={bulletX}
-                        cy={16 * scale}
+                        cy={16 * effectiveScale}
                         fill={theme.completedAccent}
-                        r={9 * scale}
+                        r={9 * effectiveScale}
                       />
                       <path
-                        d={`M ${bulletX - 4 * scale} ${16 * scale} L ${bulletX - 1 * scale} ${19 * scale} L ${bulletX + 5 * scale} ${13 * scale}`}
+                        d={`M ${bulletX - 4 * effectiveScale} ${16 * effectiveScale} L ${bulletX - 1 * effectiveScale} ${19 * effectiveScale} L ${bulletX + 5 * effectiveScale} ${13 * effectiveScale}`}
                         fill="none"
                         stroke={theme.background}
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth={2 * scale}
+                        strokeWidth={2 * effectiveScale}
                       />
                     </g>
                   ) : isNext ? (
                     <circle
                       cx={bulletX}
-                      cy={16 * scale}
+                      cy={16 * effectiveScale}
                       fill={theme.highlight}
-                      r={7 * scale}
+                      r={7 * effectiveScale}
                     />
                   ) : (
                     <circle
                       cx={bulletX}
-                      cy={16 * scale}
+                      cy={16 * effectiveScale}
                       fill="none"
                       stroke={theme.architecturalLine}
-                      strokeWidth={2 * scale}
-                      r={6 * scale}
+                      strokeWidth={2 * effectiveScale}
+                      r={6 * effectiveScale}
                     />
                   )}
 
@@ -304,11 +369,11 @@ export const WallpaperArtwork = forwardRef<SVGSVGElement, WallpaperArtworkProps>
                   <text
                     fill={isNext ? theme.highlight : theme.secondaryText}
                     fontFamily="'Manrope', -apple-system, sans-serif"
-                    fontSize={25 * scale}
+                    fontSize={25 * effectiveScale}
                     fontWeight={isNext ? "700" : "500"}
                     letterSpacing="0.02em"
-                    x={52 * scale}
-                    y={24 * scale}
+                    x={52 * effectiveScale}
+                    y={24 * effectiveScale}
                   >
                     {formatDateShort(milestone.date)}
                   </text>
@@ -317,10 +382,10 @@ export const WallpaperArtwork = forwardRef<SVGSVGElement, WallpaperArtworkProps>
                   <text
                     fill={theme.secondaryText}
                     fontFamily="'Manrope', -apple-system, sans-serif"
-                    fontSize={25 * scale}
+                    fontSize={25 * effectiveScale}
                     opacity="0.5"
-                    x={145 * scale}
-                    y={24 * scale}
+                    x={145 * effectiveScale}
+                    y={24 * effectiveScale}
                   >
                     ·
                   </text>
@@ -335,12 +400,12 @@ export const WallpaperArtwork = forwardRef<SVGSVGElement, WallpaperArtworkProps>
                         : theme.primaryText
                     }
                     fontFamily="'Manrope', -apple-system, sans-serif"
-                    fontSize={25 * scale}
+                    fontSize={25 * effectiveScale}
                     fontWeight={isNext ? "700" : "500"}
                     letterSpacing="-0.01em"
                     opacity={isCompleted ? 0.65 : isNext ? 1 : 0.9}
-                    x={170 * scale}
-                    y={24 * scale}
+                    x={170 * effectiveScale}
+                    y={24 * effectiveScale}
                   >
                     {milestone.label}
                   </text>
@@ -350,7 +415,47 @@ export const WallpaperArtwork = forwardRef<SVGSVGElement, WallpaperArtworkProps>
           </g>
         </g>
 
-        {/* Region 4 (86% - 100%): Intentionally kept quiet for phone UI controls! */}
+        {/* =======================================================
+            REGION 4: GROUND LANDSCAPE & BASELINE (86% - 100%)
+            ======================================================= */}
+        <g>
+          {/* Subtle Architectural Horizon Ground Line */}
+          <line
+            stroke={theme.architecturalLine}
+            strokeDasharray="4 6"
+            strokeOpacity="0.3"
+            strokeWidth={1.5 * effectiveScale}
+            x1={width * 0.1}
+            x2={width * 0.9}
+            y1={groundLevelY}
+            y2={groundLevelY}
+          />
+
+          {/* Gentle Path / Ground Shrub Silhouettes */}
+          <g opacity="0.35">
+            <path
+              d={`M ${width * 0.44} ${groundLevelY} C ${width * 0.45} ${height * 0.94}, ${width * 0.42} ${height * 0.98}, ${width * 0.40} ${height}`}
+              fill="none"
+              stroke={theme.architecturalLine}
+              strokeWidth={1.5 * effectiveScale}
+            />
+            <path
+              d={`M ${width * 0.56} ${groundLevelY} C ${width * 0.55} ${height * 0.94}, ${width * 0.58} ${height * 0.98}, ${width * 0.60} ${height}`}
+              fill="none"
+              stroke={theme.architecturalLine}
+              strokeWidth={1.5 * effectiveScale}
+            />
+          </g>
+
+          {/* Ambient Ground Base Tone */}
+          <rect
+            fill="url(#groundLandscapeFade)"
+            height={height - groundLevelY}
+            width={width}
+            x="0"
+            y={groundLevelY}
+          />
+        </g>
       </svg>
     );
   }

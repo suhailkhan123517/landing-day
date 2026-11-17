@@ -8,12 +8,16 @@ export interface WallpaperTheme {
   doorGlow: string;
   doorWood: string;
   facadeFill: string;
+  groundFill: string;
   highlight: string;
   id: ThemeKey;
   name: string;
   primaryText: string;
   roofFill: string;
   secondaryText: string;
+  skyMid: string;
+  skyTop: string;
+  starsColor: string;
   tagline: string;
   timelineTrack: string;
   windowLitFill: string;
@@ -31,12 +35,16 @@ export const WALLPAPER_THEMES: Record<ThemeKey, WallpaperTheme> = {
     doorGlow: "#F5C87A",
     doorWood: "#1B3B2F",
     facadeFill: "#122820",
+    groundFill: "#07130F",
     highlight: "#F5C87A",
     id: "evergreen",
     name: "Evergreen / Cream",
     primaryText: "#F7F5EE",
     roofFill: "#0A1813",
     secondaryText: "#9CB0A3",
+    skyMid: "#112920",
+    skyTop: "#07140F",
+    starsColor: "#F5C87A",
     tagline: "Quiet botanical warmth",
     timelineTrack: "rgba(156, 176, 163, 0.2)",
     windowLitFill: "#FFF2CF",
@@ -52,12 +60,16 @@ export const WALLPAPER_THEMES: Record<ThemeKey, WallpaperTheme> = {
     doorGlow: "#F2C078",
     doorWood: "#1E3040",
     facadeFill: "#15222E",
+    groundFill: "#0A1016",
     highlight: "#F2C078",
     id: "midnight",
     name: "Midnight / Amber",
     primaryText: "#F5F0E6",
     roofFill: "#0D151D",
     secondaryText: "#BBC4C8",
+    skyMid: "#162432",
+    skyTop: "#080E14",
+    starsColor: "#F2C078",
     tagline: "Dusk architectural serenity",
     timelineTrack: "rgba(187, 196, 200, 0.2)",
     windowLitFill: "#FFDFA3",
@@ -73,12 +85,16 @@ export const WALLPAPER_THEMES: Record<ThemeKey, WallpaperTheme> = {
     doorGlow: "#E59560",
     doorWood: "#E0D7C7",
     facadeFill: "#EFEBE2",
+    groundFill: "#E8E2D4",
     highlight: "#D86A43",
     id: "paper",
     name: "Paper / Terracotta",
     primaryText: "#22252A",
     roofFill: "#E4DED3",
     secondaryText: "#6F767E",
+    skyMid: "#FAF7F2",
+    skyTop: "#EDE7DA",
+    starsColor: "#D86A43",
     tagline: "Warm book-cover edition",
     timelineTrack: "rgba(111, 118, 126, 0.25)",
     windowLitFill: "#FFF1E0",
