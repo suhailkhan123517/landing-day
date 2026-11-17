@@ -38,6 +38,8 @@ As you check off preparation milestones in the editor, **each completed step ill
 
 | Asset | Preview | Resolution / Purpose |
 |---|---|---|
+| **Live Web App** | [suhailkhan123517.github.io/landing-day](https://suhailkhan123517.github.io/landing-day/) | Production Live App · Tested on Mobile & Desktop |
+| **GitHub Repository** | [github.com/suhailkhan123517/landing-day](https://github.com/suhailkhan123517/landing-day) | Source Code, Test Suite & Vector Artwork |
 | **Cover Showcase** | [`cover-preview.png`](./cover-preview.png) | 1600 × 900 px · Handshake Challenge Submission Cover |
 | **Hero Midnight Wallpaper** | [`landing-day-midnight-wallpaper.png`](./landing-day-midnight-wallpaper.png) | 1290 × 2796 px · Deep Midnight Ink & Warm Amber (#101A23 / #F2C078) |
 | **Editorial Paper Wallpaper** | [`landing-day-paper-wallpaper.png`](./landing-day-paper-wallpaper.png) | 1290 × 2796 px · Warm Natural Paper & Terracotta (#F7F4EE / #D86A43) |
@@ -164,15 +166,11 @@ npx tsx scripts/generate-assets.tsx
 - **Project Title**: `Landing Day — A Little Closer to Home`
 - **One-Sentence Description**: `A personalized moving-day countdown lock screen that turns a stressful deadline into a calm sequence of small, achievable steps.`
 - **Cover Image**: [`cover-preview.png`](./cover-preview.png)
-- **Project Description**:
+- **Live Project URL**: [https://suhailkhan123517.github.io/landing-day/](https://suhailkhan123517.github.io/landing-day/)
+- **GitHub Repository**: [https://github.com/suhailkhan123517/landing-day](https://github.com/suhailkhan123517/landing-day)
+- **Project Description (494 / 500 characters)**:
   ```text
-  Landing Day turns the countdown to a new home into a calm, useful daily ritual.
-
-  Choose your moving date, personalize five preparation milestones, and create a wallpaper sized for your phone. The countdown makes the deadline clear, while the next milestone keeps one practical action in view.
-
-  An original illustrated home fills with warm light as you complete your preparations. Time remaining and work completed are shown separately, so the design stays both encouraging and honest.
-
-  The layout reserves space for the system clock and controls, uses readable typography, and exports a clean PNG. Your settings stay saved in your browser, ready whenever you want to generate an updated wallpaper.
+  Landing Day turns moving into a new home into a calm daily ritual. At its heart is an architectural home at dusk with five windows: as you complete each preparation step, one window fills with warm amber light. The door glows from the start, while countdown time and tasks stay independent for honest progress. Features safe-area zoning for device clocks, 3 curated themes, and instant 1290×2796 Ultra-HD lock screen export. Built for the Handshake AI Skills Studio × Google November Challenge.
   ```
 
 ---
